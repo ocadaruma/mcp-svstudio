@@ -1,4 +1,4 @@
-STATE_FILE = "/tmp/svstudio-mcp-state.txt"
+STATE_FILE = "/tmp/mcp-svstudio-state.txt"
 
 function getClientInfo()
     return {

@@ -1,7 +1,7 @@
 POLL_INTERVAL = 500
-COMMAND_FILE = "/tmp/svstudio-mcp-command.json"
-STATE_FILE = "/tmp/svstudio-mcp-state.txt"
-RESPONSE_FILE = "/tmp/svstudio-mcp-command-response.json"
+COMMAND_FILE = "/tmp/mcp-svstudio-command.json"
+STATE_FILE = "/tmp/mcp-svstudio-state.txt"
+RESPONSE_FILE = "/tmp/mcp-svstudio-command-response.json"
 
 -- JSON library --
 -- Taken from https://gist.github.com/tylerneylon/59f4bcf316be525b30ab --

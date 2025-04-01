@@ -20,7 +20,7 @@ On MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
     "SynthesizerVStudioMCP": {
       "command": "/path/to/node",
       "args": [
-        "/path/to/svstudio-mcp/build/index.js"
+        "/path/to/mcp-svstudio/build/index.js"
       ]
     }
   }

@@ -1,11 +1,11 @@
 {
-  "name": "svstudio-mcp",
+  "name": "mcp-svstudio",
   "version": "0.1.0",
   "description": "MCP server for Synthesizer V Studio",
   "private": true,
   "type": "module",
   "bin": {
-    "svstudio-mcp": "./build/index.js"
+    "mcp-svstudio": "./build/index.js"
   },
   "files": [
     "build"

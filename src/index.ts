@@ -20,8 +20,8 @@ import {
 import * as fs from "fs/promises";
 
 // File paths for communication with the Lua script
-const COMMAND_FILE = process.env.COMMAND_FILE || "/tmp/svstudio-mcp-command.json";
-const RESPONSE_FILE = process.env.RESPONSE_FILE || "/tmp/svstudio-mcp-command-response.json";
+const COMMAND_FILE = process.env.COMMAND_FILE || "/tmp/mcp-svstudio-command.json";
+const RESPONSE_FILE = process.env.RESPONSE_FILE || "/tmp/mcp-svstudio-command-response.json";
 
 // Timeout for waiting for response (in milliseconds)
 const RESPONSE_TIMEOUT = 10000;
@@ -114,7 +114,7 @@ interface Note {
  */
 const server = new Server(
   {
-    name: "svstudio-mcp",
+    name: "mcp-svstudio",
     version: "0.1.0",
   },
   {
