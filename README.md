@@ -34,7 +34,7 @@ Add below config to the MCP server config of your client. (e.g. On MacOS Claude 
     "SynthesizerVStudioMCP": {
       "command": "/path/to/node",
       "args": [
-        "/path/to/mcp-svstudio/build/index.js"
+        "/path/to/mcp-svstudio/dist/index.js"
       ]
     }
   }
