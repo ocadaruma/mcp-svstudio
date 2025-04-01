@@ -329,6 +329,64 @@ function executeCommand(commandJson)
             message = message,
             noteIds = addedNoteIds,
         })
+    elseif command.action == "edit_notes" then
+        local trackId = tonumber(command.trackId)
+        local project = SV:getProject()
+        local notes = command.notes
+
+        if not trackId or trackId < 1 or trackId > project:getNumTracks() then
+            writeResponse({ error = "Invalid track ID" })
+            return
+        end
+
+        if not notes or type(notes) ~= "table" or #notes == 0 then
+            writeResponse({ error = "No notes provided" })
+            return
+        end
+
+        local track = project:getTrack(trackId)
+        if track:getNumGroups() < 2 then
+            local group = SV:create("NoteGroup")
+            local groupRef = SV:create("NoteGroupReference")
+            project:addNoteGroup(group)
+            groupRef:setTarget(group)
+            track:addGroupReference(groupRef)
+        end
+
+        -- Always use first group for simplicity
+        local groupRef = track:getGroupReference(2)
+        local group = groupRef:getTarget()
+        local editedNoteIds = {}
+
+        for i, noteData in ipairs(notes) do
+            local note = group:getNote(noteData.id)
+
+            if noteData.lyrics then
+                note:setLyrics(noteData.lyrics)
+            end
+            if noteData.startTime then
+                note:setOnset(noteData.startTime)
+            end
+            if noteData.duration then
+                note:setDuration(noteData.duration)
+            end
+            if noteData.pitch then
+                note:setPitch(noteData.pitch)
+            end
+            table.insert(editedNoteIds, noteData.id)
+        end
+
+        local message
+        if #editedNoteIds == 1 then
+            message = "Note edited successfully"
+        else
+            message = #editedNoteIds .. " notes edited successfully"
+        end
+
+        writeResponse({
+            message = message,
+            noteIds = editedNoteIds,
+        })
     elseif command.action == "add_track" then
         local project = SV:getProject()
         local trackName = command.name or "New Track"

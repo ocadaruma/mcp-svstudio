@@ -327,6 +327,50 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: []
         }
       },
+      {
+        name: "edit_notes",
+        description: "Edit one or more notes",
+        inputSchema: {
+          type: "object",
+          properties: {
+            trackId: {
+              type: "string",
+              description: "ID of the track"
+            },
+            notes: {
+              type: "array",
+              description: "Array of notes to edit",
+              items: {
+                type: "object",
+                properties: {
+                  id: {
+                    type: "number",
+                    description: "The ID of the note"
+                  },
+                  lyrics: {
+                    type: "string",
+                    description: "Lyrics text for the note"
+                  },
+                  startTime: {
+                    type: "number",
+                    description: "Start time in ticks"
+                  },
+                  duration: {
+                    type: "number",
+                    description: "Duration in ticks"
+                  },
+                  pitch: {
+                    type: "number",
+                    description: "MIDI pitch (0-127)"
+                  }
+                },
+                required: ["id"]
+              }
+            }
+          },
+          required: ["trackId", "notes"]
+        }
+      },
     ]
   };
 });
@@ -442,6 +486,59 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [{
             type: "text",
             text: result.message || `${args.notes.length} notes added successfully`
+          }]
+        };
+      }
+
+      case "edit_notes": {
+        const args = request.params.arguments as any;
+        const trackId = Number(args.trackId);
+
+        if (isNaN(trackId)) {
+          return {
+            content: [{
+              type: "text",
+              text: "Error: Invalid track ID"
+            }],
+            isError: true
+          };
+        }
+
+        if (!Array.isArray(args.notes) || args.notes.length === 0) {
+          return {
+            content: [{
+              type: "text",
+              text: "Error: No notes provided"
+            }],
+            isError: true
+          };
+        }
+
+        const result = await executeCommand("edit_notes", {
+          trackId,
+          notes: args.notes.map((note: any) => ({
+            id: Number(note.id),
+            lyrics: note.lyrics && String(note.lyrics),
+            startTime: note.startTime && Number(note.startTime),
+            duration: note.duration && Number(note.duration),
+            pitch: note.pitch && Number(note.pitch)
+          }))
+        });
+
+        if (result.error) {
+          return {
+            content: [{
+              type: "text",
+              text: `Error: ${result.error}`
+            }],
+            isError: true
+          };
+        }
+
+        return {
+          content: [{
+            type: "text",
+            text: result.message || `${args.notes.length} notes edited successfully`
           }]
         };
       }
